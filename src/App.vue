@@ -4,6 +4,7 @@
       <router-link :to="{name:'registro'}" v-if="!existingUser">Registro</router-link>
       <router-link :to="{name:'inicio'}" v-if="existingUser">Inicio</router-link>
       <router-link :to="{name:'ingreso'}" v-if="!existingUser">Ingreso</router-link>
+    {{existingUser}}
     </div>
     <router-view/>
   </div>
