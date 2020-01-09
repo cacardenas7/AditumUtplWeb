@@ -54,6 +54,13 @@ export default new Vuex.Store({
     }
 
   },
-  modules: {
+  getters: {
+    existingUser(state){
+      if(state.user === null || state.user === '' || state.user === undefined){
+        return false;
+      }else{
+        return true;
+      }
+    }
   }
 })
