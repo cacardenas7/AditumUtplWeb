@@ -6,6 +6,8 @@
       <router-link :to="{name:'ingreso'}" v-if="!existingUser">Ingreso</router-link>
     {{existingUser}}
       <a @click="logoutUsers" v-if="existingUser">Cerrar Sesion</a>
+      <a @click="logoutUsers" v-if="existingUser">Cerrar Sesion</a>
+      <a @click="logoutUsers" v-if="existingUser">Cerrar Sesion</a>
     </div>
     <router-view/>
   </div>
