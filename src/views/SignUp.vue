@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Registro de Usuario</h1>
-        <form @submit.prevent="createUser({email,pass:pass1})">
+        <form @submit.prevent="createUser({email,pass:pass1}),signInUser">
             <input type="email" v-model="email">
             <input type="password" v-model="pass1">
             <input type="password" v-model="pass2">
@@ -14,7 +14,7 @@
 <script>
 import {mapActions, mapState} from "vuex";
 export default {
-    name:'Registro',
+    name:'SignUp',
     data(){
     return{
       email: '',
@@ -22,7 +22,7 @@ export default {
       pass2: ''
     }
   },methods:{
-    ...mapActions(['createUser'])
+    ...mapActions(['createUser','signInUser'])
   },
   computed: {
     ...mapState(['error']),

@@ -10,20 +10,35 @@ const router = new VueRouter({
     {
       path: '/registro',
       name: 'registro',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Registro.vue')
+      component: () => import(/* webpackChunkName: "about" */ '../views/SignUp.vue'),
+      meta: {requiresAuth: true}
+
     },
     {
       path: '/',
       name: 'inicio',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Inicio.vue'),
+      component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
       meta: {requiresAuth: true}
     },
-    ,
     {
       path: '/ingreso',
       name: 'ingreso',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Ingreso.vue')
-    } 
+      component: () => import(/* webpackChunkName: "about" */ '../views/LogIn.vue')
+    },
+    {
+      path: '/carrera',
+      name: 'carrera',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Career.vue'),
+      meta: {requiresAuth: true}
+
+    },
+    {
+      path: '/area',
+      name: 'area',
+      component: () => import(/* webpackChunkName: "about" */ '../views/KnowledgeArea.vue'),
+      meta: {requiresAuth: true}
+
+    }  
   ]
 })
 
