@@ -1,26 +1,36 @@
 <template>
-    <div>
-        <h1>Carreras</h1>
+    <div class="container">
+        <br>
+        <h1 class="text-center">Carreras</h1>
+        <br>
+        <div v-if="load">
+            <h3>Cargando contenido...</h3>
+            <pulse-loader :loading="load" ></pulse-loader>
+        </div>
         <button  @click="$bvModal.show('modal-add')" class="btn btn-success btn-block">Agregar</button>
-        <table class="table">
-            <thead>
-                <tr>
-                <th scope="col">Carrera</th>
-                <th scope="col">Area</th>
-                <th scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item of careers" :key="item.id" >
-                    <th>{{item.Nombre}}</th>
-                    <th>{{item.AreaConocimiento}}</th>
-                    <th>
-                        <button  @click="$bvModal.show('modal-update'),getCareer(item.id)" class="btn btn-warning btn-sm mr-2">Editar</button>
-                        <button  @click="deleteCareer(item.id)" class="btn btn-danger btn-sm">Eliminar</button>
-                    </th>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                    <th scope="col">Carrera</th>
+                    <th scope="col">Area</th>
+                    <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item of careers" :key="item.id" >
+                        <th>{{item.Nombre}}</th>
+                        <th>{{item.AreaConocimiento}}</th>
+                        <th>
+                            <div class="form-label-group text-center">
+                                <button  @click="$bvModal.show('modal-update'),getCareer(item.id)" class="btn btn-warning btn-sm">Editar</button>
+                                <button  @click="deleteCareer(item.id)" class="btn btn-danger btn-sm">Eliminar</button>
+                            </div>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <b-modal id="modal-add" hide-footer>
           <template v-slot:modal-title>
             <h3 class="text-center">Agregar Carrera</h3>
@@ -73,7 +83,8 @@
 </template>
 
 <script>
-import{mapActions, mapState} from 'vuex'
+import{mapActions, mapState} from 'vuex';
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 export default {
     name:'Career',
     data() {
@@ -91,7 +102,7 @@ export default {
         this.getKnowledgeAreas();
     },
     computed: {
-        ...mapState(['careers','arrayAreas','career'])
+        ...mapState(['careers','arrayAreas','career','load'])
         /*
         ArrayNames:function(){
             let arrayNames = [];
@@ -137,5 +148,8 @@ export default {
         */
 
     },
+    components: {
+        PulseLoader
+    }
 }
 </script>

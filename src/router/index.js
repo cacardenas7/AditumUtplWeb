@@ -38,7 +38,14 @@ const router = new VueRouter({
       component: () => import(/* webpackChunkName: "about" */ '../views/KnowledgeArea.vue'),
       meta: {requiresAuth: true}
 
-    }  
+    },
+    {
+      path: '/bloques',
+      name: 'bloques',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Blocks.vue'),
+      meta: {requiresAuth: true}
+
+    }   
   ]
 })
 

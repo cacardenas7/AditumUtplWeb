@@ -1,6 +1,9 @@
 <template>
-    <div>
+    <div class="container">
+        <div class="text-center">
+            <br>
         <h3>Bienvenido {{user.email}}</h3>
+        </div>
     </div>
 </template>
 

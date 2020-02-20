@@ -14,7 +14,13 @@ export default new Vuex.Store({
     careers: [],
     career:{Nombre: "", AreaConocimiento:{}},
     arrayAreas: [],
-    knowledgeArea:{Nombre:""}
+    knowledgeArea:{Nombre:""},
+    arrayBlocks: [],
+    block:{NombreBloque:""},
+    arrayBank: [],
+    bank:{Dificultad: "", Pregunta: "", PreguntaImagen: "", Rta1: "", Rta2: "", Rta3: "", RtaCorrecta: ""},
+    sIdBlock:"",
+    load: false
   },
   mutations: {
     setUser(state,payload){
@@ -34,6 +40,26 @@ export default new Vuex.Store({
     },
     setKnowledgeArea(state,payload){
       state.knowledgeArea = payload;
+    },
+    setBlocks(state,payload){
+      state.arrayBlocks = payload;
+    },
+    setBlock(state,payload){
+      state.block = payload;
+    },
+    setBanks(state,payload){
+      state.arrayBank = payload;
+    },
+    setBank(state,payload){
+      state.bank = payload;
+    },
+    setidBlock(state,payload){
+      state.sIdBlock = payload;
+    },
+
+    //Load animation
+    loadFirebase(state,payload){
+      state.load = payload
     }
   },
   actions: {
@@ -70,9 +96,9 @@ export default new Vuex.Store({
       router.push({name: 'ingreso'})
     },
 
-    //Career Query
-    
+    //Careers Query
     getCareers({commit}){
+      commit('loadFirebase',true);
       const careers =[]
       db.collection('Carreras').get().then(snapshot => {
         snapshot.forEach(doc => {
@@ -80,8 +106,8 @@ export default new Vuex.Store({
           career.id = doc.id
           careers.push(career)
         });
+      commit('loadFirebase',false);
       })
-
       commit('setCareers', careers)
     },
     getCareer({commit}, id){
@@ -96,9 +122,6 @@ export default new Vuex.Store({
       db.collection('Carreras').add({
         Nombre: payload.name,
         AreaConocimiento: payload.careersChecked
-      })
-      .then(doc => {
-        router.push({name: 'carrera'})
       })
     },
     deleteCareer({commit, dispatch}, id){
@@ -152,13 +175,104 @@ export default new Vuex.Store({
         dispatch('getKnowledgeAreas')
       })
     },
-    updateKnowledgeArea({commit}, knowledgeArea){
-      db.collection('AreaConocimiento').doc(knowledgeArea.id).update({
-        Nombre: knowledgeArea.Nombre
+    updateKnowledgeArea({commit}, payload){
+      db.collection('AreaConocimiento').doc(payload.id).update({
+        Nombre: payload.Nombre
 
       })
     },
 
+    //Blocks Query
+    getBlocks({commit},id){
+      const arrayBlocks =[]
+      db.collection('AreaConocimiento').doc(id).collection('Bloques').get().then(snapshot => {
+        snapshot.forEach(doc => {
+          let blocks = doc.data();
+          blocks.id = doc.id
+          arrayBlocks.push(blocks)
+        });
+      })
+      commit('setBlocks', arrayBlocks)
+    },
+    getBlock({commit},payload){
+      db.collection('AreaConocimiento').doc(payload.idArea).collection('Bloques').doc(payload.idBlock).get().then(doc=>{
+        let block = doc.data();
+        block.id = doc.id
+        block.idArea = payload.idArea
+        block.idBlock = payload.idBlock
+        commit('setBlock', block)
+      })
+    },
+    addBlocks({commit}, payload){
+      db.collection('AreaConocimiento').doc(payload.idArea).collection('Bloques').add({
+        NombreBloque: payload.NombreBloque
+      })
+      .then(doc => {
+        router.push({name: 'bloques'})
+      })
+    },
+    deleteBlocks({commit, dispatch}, payload){
+      db.collection('AreaConocimiento').doc(payload.idArea).collection('Bloques').doc(payload.idBlock).delete()
+    },
+    updateBlock({commit}, payload){
+      db.collection('AreaConocimiento').doc(payload.idArea).collection('Bloques').doc(payload.idBlock).update({
+        NombreBloque: payload.NombreBloque
+      })
+    },
+
+    //Bank Query
+    saveIdBlock({commit},id){
+      commit('setidBlock', id)
+    },
+    getBanks({commit},payload){
+      const arrayBank =[]
+      db.collection('AreaConocimiento').doc(payload.idArea).collection('Bloques').doc(payload.idBlock).collection('BancoPreguntas').get().then(snapshot => {
+        snapshot.forEach(doc => {
+          let bank = doc.data();
+          bank.id = doc.id
+          arrayBank.push(bank)
+        });
+      })
+      commit('setBanks', arrayBank)
+    },
+    getBank({commit},payload){
+      db.collection('AreaConocimiento').doc(payload.idArea).collection('Bloques').doc(payload.idBlock).collection('BancoPreguntas').doc(payload.idBank).get().then(doc=>{
+        let bank = doc.data();
+        bank.id = doc.id
+        bank.idArea = payload.idArea
+        bank.idBlock = payload.idBlock
+        bank.idBank = payload.idBank
+        commit('setBank', bank)
+      })
+    },
+    addBanks({commit}, payload){
+      db.collection('AreaConocimiento').doc(payload.idArea).collection('Bloques').doc(payload.idBlock).collection('BancoPreguntas').add({
+        Dificultad: payload.Dificultad,
+        Pregunta: payload.Pregunta,
+        PreguntaImagen: payload.PreguntaImagen,
+        Rta1: payload.Rta1,
+        Rta2: payload.Rta2,
+        Rta3: payload.Rta3,
+        RtaCorrecta: payload.RtaCorrecta
+      })
+      .then(doc => {
+        router.push({name: 'bloques'})
+      })
+    },
+    deleteBanks({commit, dispatch}, payload){
+      db.collection('AreaConocimiento').doc(payload.idArea).collection('Bloques').doc(payload.idBlock).collection('BancoPreguntas').doc(payload.idBank).delete()
+    },
+    updateBank({commit}, payload){
+      db.collection('AreaConocimiento').doc(payload.idArea).collection('Bloques').doc(payload.idBlock).collection('BancoPreguntas').doc(payload.idBank).update({
+        Dificultad: payload.Dificultad,
+        Pregunta: payload.Pregunta,
+        PreguntaImagen: payload.PreguntaImagen,
+        Rta1: payload.Rta1,
+        Rta2: payload.Rta2,
+        Rta3: payload.Rta3,
+        RtaCorrecta: payload.RtaCorrecta
+      })
+    },
 
   },
   getters: {
